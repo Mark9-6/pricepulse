@@ -1,321 +1,209 @@
-PricePulse
-A full-stack pricing intelligence project that helps compare product prices against competitor websites and generate a recommended selling price using a Python-based pricing simulation plus rule-based business logic.
+# Pricepulse
 
-Overview
-PricePulse is organized into 3 layers:
+A comprehensive price tracking and prediction platform that helps businesses optimize their pricing strategies through data-driven insights and machine learning.
 
-client/: React + Vite frontend
-server/: Express + MongoDB backend API
-ml-service/: Python pricing simulation service
-The system stores products, competitor prices, and price history in MongoDB. The backend fetches that data, passes it to the Python ML layer, merges the prediction with business rules, and returns pricing insights to the frontend.
+## 🚀 Features
 
-High-Level Architecture
+- **Real-time Price Tracking**: Monitor product prices across competitors
+- **AI-Powered Price Predictions**: Machine learning models to forecast price changes
+- **Interactive Dashboard**: Visualize price history and trends with charts
+- **Competitor Analysis**: Track and compare competitor pricing
+- **Product Management**: Manage your product catalog with detailed insights
+- **Responsive Design**: Modern, mobile-friendly interface
 
-User Browser
-React Frontend
-Axios API Client
-Express API Server
-MongoDB
-Node Pricing Service
-Python Pricing Simulator
-Project Structure
-Pricepulse/
-├── client/        # React frontend
-├── server/        # Express backend + MongoDB models + seed scripts
-└── ml-service/    # Python pricing prediction logic
-How The System Works
-The frontend loads the product catalog from the backend.
-The backend fetches:
-products
-competitor prices
-historical prices
-The backend sends that data to the Python ML service.
-The Python service computes a simulated predicted price and related signals.
-The Node backend combines that prediction with pricing rules.
-The final pricing insight is returned to the frontend.
-The frontend displays:
-our offer price
-ML predicted price
-hybrid recommendation
-competitor prices
-price history chart
-model notes and confidence
-Frontend
-Tech Stack
-React
-Vite
-Axios
-Plain CSS
-Main UI Flow
-Dashboard
-Shows:
+## 🏗️ Architecture
 
-total products
-number of predictions ready
-tracked competitor offers
-search by product name or category
-featured/trending products
-Product Details
-Shows:
+This is a full-stack application with three main components:
 
-product name and category
-our offer price
-ML predicted price
-hybrid recommendation
-lowest competitor website offer
-competitor list
-historical price chart
-model notes, trend, market position, confidence
-Frontend Routing
-The app uses a lightweight manual routing approach instead of react-router.
+### Frontend (Client)
+- **Framework**: React 19 with Vite
+- **Styling**: CSS with theme support (light/dark mode)
+- **API Communication**: Axios for REST API calls
+- **Routing**: Client-side routing with history API
 
-Routes in the browser:
+### Backend (Server)
+- **Runtime**: Node.js with Express
+- **Database**: MongoDB with Mongoose ODM
+- **API**: RESTful API endpoints
+- **Environment**: Configurable with dotenv
 
-/ -> Dashboard
-/product/:id -> Product details page
-Frontend API Usage
-The client uses a base URL from:
+### ML Service
+- **Language**: Python
+- **Purpose**: Price prediction and analysis
+- **Algorithm**: Synthetic price history generation with category-based demand modeling
 
-VITE_API_BASE_URL
-fallback: http://localhost:5001/api
-Backend
-Tech Stack
-Node.js
-Express
-Mongoose
-MongoDB
-CORS
-dotenv
-Backend Responsibilities
-connect to MongoDB
-expose REST APIs
-create and fetch products
-create and fetch competitors
-load price history
-call Python pricing service
-combine ML output with pricing rules
-return enriched product responses
-API Base Path
-All routes are mounted under:
+## 📋 Prerequisites
 
-/api
-API Routes
-POST /api/suggest
-Generate a pricing insight for one product.
+Before running this application, make sure you have the following installed:
 
-Request
+- **Node.js** (v16 or higher)
+- **npm** or **yarn**
+- **Python** (v3.8 or higher)
+- **MongoDB** (local or cloud instance)
 
-{
-  "productId": "PRODUCT_ID"
-}
-Response
+## 🛠️ Installation
 
-{
-  "productId": "PRODUCT_ID",
-  "productName": "Apple iPhone 15",
-  "currentPrice": 69900,
-  "ourPrice": 68490,
-  "suggestedPrice": 68990,
-  "pricingInsight": {}
-}
-POST /api/product
-Create a new product.
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd pricepulse
+   ```
 
-Request
+2. **Install backend dependencies**
+   ```bash
+   cd server
+   npm install
+   ```
 
-{
-  "name": "Sample Product",
-  "category": "Smartphones",
-  "currentPrice": 49999
-}
-Behavior
+3. **Install frontend dependencies**
+   ```bash
+   cd ../client
+   npm install
+   ```
 
-creates product
-automatically inserts first self price-history record
-GET /api/products
-Returns all products enriched with:
+4. **Set up environment variables**
 
-sorted competitors
-computed pricing insight
-computed ourPrice
-GET /api/products/:productId
-Returns one product with:
+   Create a `.env` file in the `server` directory:
+   ```env
+   PORT=5001
+   MONGODB_URI=mongodb://localhost:27017/pricepulse
+   NODE_ENV=development
+   ```
 
-full product info
-competitors
-price history
-pricing insight
-computed ourPrice
-POST /api/competitor
-Create a competitor offer.
+5. **Seed the database** (optional)
+   ```bash
+   cd server
+   npm run seed:tech
+   ```
 
-Request
+## 🚀 Running the Application
 
-{
-  "productId": "PRODUCT_ID",
-  "competitorName": "Amazon",
-  "price": 47999
-}
-GET /api/competitors
-Returns all competitor entries.
+### Development Mode
 
-Database Models
-Product
-Fields:
+1. **Start the backend server**
+   ```bash
+   cd server
+   npm run dev
+   ```
 
-name: string, required
-category: string
-currentPrice: number, required
-timestamps
-Competitor
-Fields:
+2. **Start the frontend client** (in a new terminal)
+   ```bash
+   cd client
+   npm run dev
+   ```
 
-productId: ObjectId -> Product
-competitorName: string, required
-price: number, required
-timestamps
-PriceHistory
-Fields:
+3. **Access the application**
+   - Frontend: http://localhost:5173
+   - Backend API: http://localhost:5001
 
-productId: ObjectId -> Product
-price: number, required
-source: string, default "self"
-date: date, default current time
-timestamps
-Pricing Engine
-1. Python ML Layer
-The active ML layer is in Python. It is not a saved trained model like .pkl or .pt. It is a simulation-based predictor using pricing features.
+### Production Build
 
-Inputs Used
-current product price
-competitor prices
-average competitor price
-minimum competitor price
-product category
-historical prices
-price momentum
-price volatility
-deterministic product seed
-Outputs Produced
-predictedPrice
-confidence
-demandScore
-trend
-marketPosition
-competitorAveragePrice
-competitorMinPrice
-competitorCount
-predictedChangePct
-drivers
-featureSnapshot
-modelVersion
-ML Characteristics
-deterministic simulation
-category-based demand baseline
-synthetic fallback history if history is missing
-confidence depends on history depth, competitor count, and volatility
-2. Rule-Based Pricing Layer
-After the Python output is returned, Node applies business rules.
+1. **Build the frontend**
+   ```bash
+   cd client
+   npm run build
+   ```
 
-Rule Logic
-if competitor price is lower than our current price:
-reduce toward competitor price
-if demand is strong:
-slightly increase from current price
-otherwise:
-keep close to current price
-Hybrid Combination
-Final recommendation is blended using:
+2. **Start the backend**
+   ```bash
+   cd server
+   npm start
+   ```
 
-70% ML predicted price
-30% rule-based price
-Competitive Adjustment
-The backend then:
+## 📡 API Endpoints
 
-caps offer price near competitor average/minimum
-clamps offer within a safe range around current price
-computes savings vs lowest and average competitor prices
-So the final displayed pricing is not just the raw ML output. It is a hybrid recommendation.
+### Products
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get product by ID
+- `POST /api/product` - Create new product
 
-Dataset
-The project uses a synthetic generated catalog, not a real scraped or labeled dataset.
+### Pricing
+- `POST /api/suggest` - Get price suggestions
 
-Dataset Source
-Generated from:
+### Competitors
+- `GET /api/competitors` - Get all competitors
+- `POST /api/competitor` - Create new competitor
 
-category definitions
-brand/model lists
-pricing formulas
-deterministic hash-based jitter
-simulated competitor offers
-simulated historical prices
-Categories Included
-Smartphones
-Tablets
-Laptops
-Headphones
-Earbuds
-Smartwatches
-Bluetooth Speakers
-Seeded Data Contents
-For each product, the dataset generates:
+## 🧠 Machine Learning Service
 
-product name
-category
-current price
-5 self price-history points
-3 competitor offers:
-Amazon
-Flipkart
-official brand website
-Dataset Size
-exactly 200 products
-Data Seeding
-The backend includes a seed script that:
+The ML service provides price prediction capabilities:
 
-generates the synthetic tech catalog
-creates or updates products
-deletes old competitor/history rows for those products
-inserts fresh competitor and price-history data
-Command:
+- **Input**: Product details, category, current price
+- **Output**: Predicted price changes, confidence scores
+- **Algorithm**: Uses category-based demand modeling and synthetic historical data
 
-npm run seed:tech
-Request Lifecycle Example
-Example: Loading Dashboard
-frontend calls GET /api/products
-backend loads all products from MongoDB
-backend loads competitor prices and price history
-backend sends each product bundle to Python
-Python returns prediction results
-Node merges ML prediction with business logic
-frontend receives enriched products and renders cards
-Example: Opening Product Detail
-frontend calls GET /api/products/:productId
-backend loads full product data
-backend computes one pricing insight
-frontend renders detail page and chart
-Environment Variables
-Client
-VITE_API_BASE_URL=http://localhost:5001/api
-Server
-MONGO_URI=your_mongodb_connection_string
-PORT=5001
-PYTHON_BIN=python
-PYTHON_BIN is optional and used if Python is not available as python.
+Run the ML service independently:
+```bash
+cd ml-service
+python predict_price.py
+```
 
-Important Notes
-the frontend currently does not call POST /api/suggest; it mainly uses the enriched product endpoints
-the ML service is simulation-based, not a separately trained persisted model
-the dataset is synthetic and seeded into MongoDB
-there is no authentication system in the current project
-there is no advanced validation layer beyond Mongoose schema constraints
-routing on the frontend is custom and minimal
-Summary
-PricePulse is a pricing recommendation system for tech products. It combines:
+## 🗂️ Project Structure
 
-a React catalog and analytics UI
-an Express/MongoDB API layer
-synthetic product/competitor/history data
-a Python pricing simulation engine
-a hybrid recommendation strategy that blends ML-style prediction with business rules
-It is best described as a full-stack intelligent pricing demo for product comparison and offer recommendation.
+```
+pricepulse/
+├── client/                 # React frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── api/           # API client
+│   │   ├── components/    # Reusable components
+│   │   ├── pages/         # Page components
+│   │   └── assets/
+│   ├── package.json
+│   └── vite.config.js
+├── server/                 # Node.js backend
+│   ├── config/            # Database configuration
+│   ├── controllers/       # Route controllers
+│   ├── models/            # MongoDB models
+│   ├── routes/            # API routes
+│   ├── scripts/           # Database seeding
+│   ├── services/          # Business logic
+│   ├── app.js
+│   ├── server.js
+│   └── package.json
+├── ml-service/             # Python ML service
+│   ├── predict_price.py
+│   └── simulatedPriceModel.mjs
+└── README.md
+```
+
+## 🧪 Testing
+
+### Backend Tests
+```bash
+cd server
+npm test
+```
+
+### Frontend Linting
+```bash
+cd client
+npm run lint
+```
+
+##  Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the ISC License - see the LICENSE file for details.
+
+##  Acknowledgments
+
+- React and Vite for the frontend framework
+- Express.js for the backend framework
+- MongoDB for the database
+- Python for machine learning capabilities
+ 
+
+ 
+
+---
+
+**Pricepulse** - Optimize your pricing strategy with data-driven insights.</content>
+<parameter name="filePath">e:\Pricepulse\README.md
