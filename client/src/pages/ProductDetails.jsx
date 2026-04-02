@@ -34,7 +34,14 @@ const ProductDetails = ({ productId, onBackHome }) => {
   }, [productId]);
 
   if (loading) {
-    return <main className="details-page"><div className="dashboard__state">Loading product details...</div></main>;
+    return (
+      <main className="details-page">
+        <div className="dashboard__state dashboard__state--loading">
+          <span className="loading-indicator" aria-hidden="true" />
+          <span>Loading, Please wait !</span>
+        </div>
+      </main>
+    );
   }
 
   if (error || !product) {

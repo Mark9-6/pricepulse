@@ -181,7 +181,11 @@ cd client
 npm run lint
 ```
 
+<<<<<<< HEAD
 ##  Contributing
+=======
+## 🤝 Contributing
+>>>>>>> 70ea106 (updated Loading UI since the render was taking too much time to GET products)
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -193,17 +197,32 @@ npm run lint
 
 This project is licensed under the ISC License - see the LICENSE file for details.
 
+<<<<<<< HEAD
 ##  Acknowledgments
+=======
+## 🙏 Acknowledgments
+>>>>>>> 70ea106 (updated Loading UI since the render was taking too much time to GET products)
 
 - React and Vite for the frontend framework
 - Express.js for the backend framework
 - MongoDB for the database
 - Python for machine learning capabilities
+<<<<<<< HEAD
  
 
  
+=======
+
+## 📞 Support
+
+If you have any questions or need help, please open an issue on GitHub.
+>>>>>>> 70ea106 (updated Loading UI since the render was taking too much time to GET products)
 
 ---
 
 **Pricepulse** - Optimize your pricing strategy with data-driven insights.</content>
+<<<<<<< HEAD
 <parameter name="filePath">e:\Pricepulse\README.md
+=======
+<parameter name="filePath">e:\Pricepulse\README.md
+>>>>>>> 70ea106 (updated Loading UI since the render was taking too much time to GET products)

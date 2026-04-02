@@ -263,9 +263,35 @@
   text-align: left;
 }
 
+.dashboard__state--loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.loading-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid var(--border-medium);
+  border-top-color: var(--accent-teal);
+  animation: loading-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
 .dashboard__state--error {
   border-color: var(--error-border);
   color: var(--error);
+}
+
+@keyframes loading-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .dashboard__grid {

@@ -117,7 +117,12 @@ const Dashboard = ({ onSelectProduct }) => {
         </div>
       </section>
 
-      {loading ? <div className="dashboard__state">Loading products...</div> : null}
+      {loading ? (
+        <div className="dashboard__state dashboard__state--loading">
+          <span className="loading-indicator" aria-hidden="true" />
+          <span>Loading, Please wait !</span>
+        </div>
+      ) : null}
 
       {!loading && error ? (
         <div className="dashboard__state dashboard__state--error">{error}</div>
